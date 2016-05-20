@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatelessLib", "StatelessLib\StatelessLib.csproj", "{9387FA83-4D44-4991-8433-4AF52AD11430}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatelessLib.Tests", "StatelessLib.Tests\StatelessLib.Tests.csproj", "{32223DC6-E357-4073-9267-296BA3706EDF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9387FA83-4D44-4991-8433-4AF52AD11430}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9387FA83-4D44-4991-8433-4AF52AD11430}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9387FA83-4D44-4991-8433-4AF52AD11430}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9387FA83-4D44-4991-8433-4AF52AD11430}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32223DC6-E357-4073-9267-296BA3706EDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32223DC6-E357-4073-9267-296BA3706EDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32223DC6-E357-4073-9267-296BA3706EDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32223DC6-E357-4073-9267-296BA3706EDF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
