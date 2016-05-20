@@ -26,6 +26,15 @@ namespace StatelessLib
             _stateMachine.Configure(DocumentState.PendingAcceptance)
                 .Permit(DocumentTrigger.AcceptedBySupervisor, DocumentState.Accepted)
                 .Permit(DocumentTrigger.RejectedBySupervisor, DocumentState.FirstEmployeeFix);
+
+            _stateMachine.Configure(DocumentState.FirstEmployeeFix)
+                .Permit(DocumentTrigger.FirstEmployeeInputFinished, DocumentState.SecondEmployeeFix);
+
+            _stateMachine.Configure(DocumentState.SecondEmployeeFix)
+                .Permit(DocumentTrigger.SecondEmployeeInputFinished, DocumentState.PendingAcceptance);
+
+            _stateMachine.Configure(DocumentState.Accepted)
+                .Permit(DocumentTrigger.SentToArchive, DocumentState.Archived);
         }
 
         public void FinishFirstEmployeeEntry()
@@ -36,6 +45,21 @@ namespace StatelessLib
         public void FinishSecondEmployeeEntry()
         {
             _stateMachine.Fire(DocumentTrigger.SecondEmployeeInputFinished);
+        }
+
+        public void Reject()
+        {
+            _stateMachine.Fire(DocumentTrigger.RejectedBySupervisor);
+        }
+
+        public void Accept()
+        {
+            _stateMachine.Fire(DocumentTrigger.AcceptedBySupervisor);
+        }
+
+        public void Archive()
+        {
+            _stateMachine.Fire(DocumentTrigger.SentToArchive);
         }
 
         public void TestOnEntry()

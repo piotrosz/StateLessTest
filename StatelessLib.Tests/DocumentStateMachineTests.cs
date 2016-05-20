@@ -15,6 +15,21 @@ namespace StatelessLib.Tests
 
             doc.FinishSecondEmployeeEntry();
             doc.State.Should().Be(DocumentState.PendingAcceptance);
+
+            doc.Reject();
+            doc.State.Should().Be(DocumentState.FirstEmployeeFix);
+
+            doc.FinishFirstEmployeeEntry();
+            doc.State.Should().Be(DocumentState.SecondEmployeeFix);
+
+            doc.FinishSecondEmployeeEntry();
+            doc.State.Should().Be(DocumentState.PendingAcceptance);
+
+            doc.Accept();
+            doc.State.Should().Be(DocumentState.Accepted);
+            
+            doc.Archive();
+            doc.State.Should().Be(DocumentState.Archived);
         }
     }
 }
