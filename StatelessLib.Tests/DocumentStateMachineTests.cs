@@ -10,20 +10,26 @@ namespace StatelessLib.Tests
         {
             var doc = new Document();
 
+            doc.CurrentPerson.Should().Be("Adam");
             doc.FinishFirstEmployeeEntry();
             doc.State.Should().Be(DocumentState.SecondEmployeeInput);
+            doc.CurrentPerson.Should().Be("Juliette");
 
             doc.FinishSecondEmployeeEntry();
             doc.State.Should().Be(DocumentState.PendingAcceptance);
+            doc.CurrentPerson.Should().Be("Samantha");
 
             doc.Reject();
             doc.State.Should().Be(DocumentState.FirstEmployeeFix);
+            doc.CurrentPerson.Should().Be("Adam");
 
             doc.FinishFirstEmployeeEntry();
             doc.State.Should().Be(DocumentState.SecondEmployeeFix);
+            doc.CurrentPerson.Should().Be("Juliette");
 
             doc.FinishSecondEmployeeEntry();
             doc.State.Should().Be(DocumentState.PendingAcceptance);
+            doc.CurrentPerson.Should().Be("Samantha");
 
             doc.Accept();
             doc.State.Should().Be(DocumentState.Accepted);

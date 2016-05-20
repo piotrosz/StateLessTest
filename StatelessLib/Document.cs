@@ -4,33 +4,38 @@ namespace StatelessLib
 {
     public class Document
     {
-        private StateMachine<DocumentState, DocumentTrigger> _stateMachine;
-        
         public DocumentState State { get; private set; }
+        public string CurrentPerson { get; private set; }
+
+        private readonly StateMachine<DocumentState, DocumentTrigger> _stateMachine;
 
         public Document()
         {
+            CurrentPerson = "Adam";
+
             _stateMachine = new StateMachine<DocumentState, DocumentTrigger>(
                 () => State,
                 newState => State = newState);
 
             _stateMachine.Configure(DocumentState.FirstEmployeeInput)
-                .OnExit(TestOnExit)
+                .OnEntry(FirstEmployeeOnEnter)
                 .Permit(DocumentTrigger.FirstEmployeeInputFinished, DocumentState.SecondEmployeeInput);
 
             _stateMachine.Configure(DocumentState.SecondEmployeeInput)
-                .OnEntry(TestOnEntry)
-                .OnExit(TestOnExit)
+                .OnEntry(SecondEmployeeOnEntry)
                 .Permit(DocumentTrigger.SecondEmployeeInputFinished, DocumentState.PendingAcceptance);
 
             _stateMachine.Configure(DocumentState.PendingAcceptance)
+                .OnEntry(AcceptanceOnEnter)
                 .Permit(DocumentTrigger.AcceptedBySupervisor, DocumentState.Accepted)
                 .Permit(DocumentTrigger.RejectedBySupervisor, DocumentState.FirstEmployeeFix);
 
             _stateMachine.Configure(DocumentState.FirstEmployeeFix)
+                .OnEntry(FirstEmployeeOnEnter)
                 .Permit(DocumentTrigger.FirstEmployeeInputFinished, DocumentState.SecondEmployeeFix);
 
             _stateMachine.Configure(DocumentState.SecondEmployeeFix)
+                .OnEntry(SecondEmployeeOnEntry)
                 .Permit(DocumentTrigger.SecondEmployeeInputFinished, DocumentState.PendingAcceptance);
 
             _stateMachine.Configure(DocumentState.Accepted)
@@ -62,14 +67,19 @@ namespace StatelessLib
             _stateMachine.Fire(DocumentTrigger.SentToArchive);
         }
 
-        public void TestOnEntry()
+        public void SecondEmployeeOnEntry()
         {
-            
+            CurrentPerson = "Juliette";
         }
 
-        public void TestOnExit()
+        public void AcceptanceOnEnter()
         {
-            
+            CurrentPerson = "Samantha";
+        }
+
+        public void FirstEmployeeOnEnter()
+        {
+            CurrentPerson = "Adam";
         }
     }
 }
