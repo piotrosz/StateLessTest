@@ -5,14 +5,12 @@ namespace StatelessLib
     public class Document
     {
         public DocumentState State { get; private set; }
-        public string CurrentPerson { get; private set; }
+        public string CurrentPerson { get; private set; } = "Adam";
 
         private readonly StateMachine<DocumentState, DocumentTrigger> _stateMachine;
 
         public Document()
         {
-            CurrentPerson = "Adam";
-
             _stateMachine = new StateMachine<DocumentState, DocumentTrigger>(
                 () => State,
                 newState => State = newState);
@@ -42,44 +40,20 @@ namespace StatelessLib
                 .Permit(DocumentTrigger.SentToArchive, DocumentState.Archived);
         }
 
-        public void FinishFirstEmployeeEntry()
-        {
-            _stateMachine.Fire(DocumentTrigger.FirstEmployeeInputFinished);
-        }
+        public void FinishFirstEmployeeEntry() => _stateMachine.Fire(DocumentTrigger.FirstEmployeeInputFinished);
 
-        public void FinishSecondEmployeeEntry()
-        {
-            _stateMachine.Fire(DocumentTrigger.SecondEmployeeInputFinished);
-        }
+        public void FinishSecondEmployeeEntry() => _stateMachine.Fire(DocumentTrigger.SecondEmployeeInputFinished);
 
-        public void Reject()
-        {
-            _stateMachine.Fire(DocumentTrigger.RejectedBySupervisor);
-        }
+        public void Reject() => _stateMachine.Fire(DocumentTrigger.RejectedBySupervisor);
+        
+        public void Accept() => _stateMachine.Fire(DocumentTrigger.AcceptedBySupervisor);
 
-        public void Accept()
-        {
-            _stateMachine.Fire(DocumentTrigger.AcceptedBySupervisor);
-        }
+        public void Archive() => _stateMachine.Fire(DocumentTrigger.SentToArchive);
+        
+        public void SecondEmployeeOnEntry() => CurrentPerson = "Juliette";
+        
+        public void AcceptanceOnEnter() => CurrentPerson = "Samantha";
 
-        public void Archive()
-        {
-            _stateMachine.Fire(DocumentTrigger.SentToArchive);
-        }
-
-        public void SecondEmployeeOnEntry()
-        {
-            CurrentPerson = "Juliette";
-        }
-
-        public void AcceptanceOnEnter()
-        {
-            CurrentPerson = "Samantha";
-        }
-
-        public void FirstEmployeeOnEnter()
-        {
-            CurrentPerson = "Adam";
-        }
+        public void FirstEmployeeOnEnter() => CurrentPerson = "Adam";
     }
 }

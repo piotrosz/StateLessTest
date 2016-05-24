@@ -6,7 +6,7 @@ namespace StatelessLib.Tests
     public class DocumentStateMachineTests
     {
         [Fact]
-        public void test_entry_action()
+        public void when_workflow_with_rejection_fired_then_persons_and_states_assigned()
         {
             var doc = new Document();
 
