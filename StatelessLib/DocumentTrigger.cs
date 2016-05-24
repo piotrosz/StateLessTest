@@ -6,6 +6,7 @@
         FirstEmployeeInputFinished,
         SecondEmployeeInputFinished,
         AcceptedBySupervisor,
-        RejectedBySupervisor
+        RejectedBySupervisor,
+        AdditionalCheckFinished
     }
 }

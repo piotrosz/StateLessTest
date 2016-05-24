@@ -7,6 +7,8 @@ namespace StatelessLib
         public DocumentState State { get; private set; }
         public string CurrentPerson { get; private set; } = "Adam";
 
+        public bool AddtionalCheck { get; set; }
+
         public readonly StateMachine<DocumentState, DocumentTrigger> StateMachine;
 
         public Document()
@@ -21,7 +23,13 @@ namespace StatelessLib
 
             StateMachine.Configure(DocumentState.SecondEmployeeInput)
                 .OnEntry(SecondEmployeeOnEntry)
-                .Permit(DocumentTrigger.SecondEmployeeInputFinished, DocumentState.PendingAcceptance);
+                .PermitIf(DocumentTrigger.SecondEmployeeInputFinished, DocumentState.AdditionalCheck, AdditionalCheckNeeded)
+                .PermitIf(DocumentTrigger.SecondEmployeeInputFinished, DocumentState.PendingAcceptance, () => !AdditionalCheckNeeded());
+
+            StateMachine.Configure(DocumentState.AdditionalCheck)
+                .OnEntry(AdditionalCheckOnEntry)
+                .Permit(DocumentTrigger.AdditionalCheckFinished, DocumentState.PendingAcceptance);
+                
 
             StateMachine.Configure(DocumentState.PendingAcceptance)
                 .OnEntry(AcceptanceOnEnter)
@@ -44,16 +52,25 @@ namespace StatelessLib
 
         public void FinishSecondEmployeeEntry() => StateMachine.Fire(DocumentTrigger.SecondEmployeeInputFinished);
 
+        public void FinishAdditionalCheck() => StateMachine.Fire(DocumentTrigger.AdditionalCheckFinished);
+
         public void Reject() => StateMachine.Fire(DocumentTrigger.RejectedBySupervisor);
-        
+
         public void Accept() => StateMachine.Fire(DocumentTrigger.AcceptedBySupervisor);
 
         public void Archive() => StateMachine.Fire(DocumentTrigger.SentToArchive);
-        
+
         public void SecondEmployeeOnEntry() => CurrentPerson = "Juliette";
-        
+
         public void AcceptanceOnEnter() => CurrentPerson = "Samantha";
 
         public void FirstEmployeeOnEnter() => CurrentPerson = "Adam";
+
+        public void AdditionalCheckOnEntry() => CurrentPerson = "John";
+
+        private bool AdditionalCheckNeeded()
+        {
+            return AddtionalCheck;
+        }
     }
 }

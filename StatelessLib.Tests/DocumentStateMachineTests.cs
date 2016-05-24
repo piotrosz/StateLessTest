@@ -40,6 +40,18 @@ namespace StatelessLib.Tests
         }
 
         [Fact]
+        public void test_additional_check()
+        {
+            var doc = new Document {AddtionalCheck = true};
+
+            doc.FinishFirstEmployeeEntry();
+            doc.FinishSecondEmployeeEntry();
+            doc.State.Should().Be(DocumentState.AdditionalCheck);
+            doc.FinishAdditionalCheck();
+            doc.State.Should().Be(DocumentState.PendingAcceptance);
+        }
+
+        [Fact]
         public void when_invalid_transition_then_exception_thrown()
         {
             var doc = new Document();

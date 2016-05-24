@@ -9,5 +9,6 @@
         FirstEmployeeFix,
         SecondEmployeeFix,
         Archived,
+        AdditionalCheck
     }
 }

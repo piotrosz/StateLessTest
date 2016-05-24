@@ -47,7 +47,6 @@
     <Compile Include="DocumentState.cs" />
     <Compile Include="DocumentTrigger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PhoneCall.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
