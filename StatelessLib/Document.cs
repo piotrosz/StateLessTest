@@ -7,48 +7,48 @@ namespace StatelessLib
         public DocumentState State { get; private set; }
         public string CurrentPerson { get; private set; } = "Adam";
 
-        private readonly StateMachine<DocumentState, DocumentTrigger> _stateMachine;
+        public readonly StateMachine<DocumentState, DocumentTrigger> StateMachine;
 
         public Document()
         {
-            _stateMachine = new StateMachine<DocumentState, DocumentTrigger>(
+            StateMachine = new StateMachine<DocumentState, DocumentTrigger>(
                 () => State,
                 newState => State = newState);
 
-            _stateMachine.Configure(DocumentState.FirstEmployeeInput)
+            StateMachine.Configure(DocumentState.FirstEmployeeInput)
                 .OnEntry(FirstEmployeeOnEnter)
                 .Permit(DocumentTrigger.FirstEmployeeInputFinished, DocumentState.SecondEmployeeInput);
 
-            _stateMachine.Configure(DocumentState.SecondEmployeeInput)
+            StateMachine.Configure(DocumentState.SecondEmployeeInput)
                 .OnEntry(SecondEmployeeOnEntry)
                 .Permit(DocumentTrigger.SecondEmployeeInputFinished, DocumentState.PendingAcceptance);
 
-            _stateMachine.Configure(DocumentState.PendingAcceptance)
+            StateMachine.Configure(DocumentState.PendingAcceptance)
                 .OnEntry(AcceptanceOnEnter)
                 .Permit(DocumentTrigger.AcceptedBySupervisor, DocumentState.Accepted)
                 .Permit(DocumentTrigger.RejectedBySupervisor, DocumentState.FirstEmployeeFix);
 
-            _stateMachine.Configure(DocumentState.FirstEmployeeFix)
+            StateMachine.Configure(DocumentState.FirstEmployeeFix)
                 .OnEntry(FirstEmployeeOnEnter)
                 .Permit(DocumentTrigger.FirstEmployeeInputFinished, DocumentState.SecondEmployeeFix);
 
-            _stateMachine.Configure(DocumentState.SecondEmployeeFix)
+            StateMachine.Configure(DocumentState.SecondEmployeeFix)
                 .OnEntry(SecondEmployeeOnEntry)
                 .Permit(DocumentTrigger.SecondEmployeeInputFinished, DocumentState.PendingAcceptance);
 
-            _stateMachine.Configure(DocumentState.Accepted)
+            StateMachine.Configure(DocumentState.Accepted)
                 .Permit(DocumentTrigger.SentToArchive, DocumentState.Archived);
         }
 
-        public void FinishFirstEmployeeEntry() => _stateMachine.Fire(DocumentTrigger.FirstEmployeeInputFinished);
+        public void FinishFirstEmployeeEntry() => StateMachine.Fire(DocumentTrigger.FirstEmployeeInputFinished);
 
-        public void FinishSecondEmployeeEntry() => _stateMachine.Fire(DocumentTrigger.SecondEmployeeInputFinished);
+        public void FinishSecondEmployeeEntry() => StateMachine.Fire(DocumentTrigger.SecondEmployeeInputFinished);
 
-        public void Reject() => _stateMachine.Fire(DocumentTrigger.RejectedBySupervisor);
+        public void Reject() => StateMachine.Fire(DocumentTrigger.RejectedBySupervisor);
         
-        public void Accept() => _stateMachine.Fire(DocumentTrigger.AcceptedBySupervisor);
+        public void Accept() => StateMachine.Fire(DocumentTrigger.AcceptedBySupervisor);
 
-        public void Archive() => _stateMachine.Fire(DocumentTrigger.SentToArchive);
+        public void Archive() => StateMachine.Fire(DocumentTrigger.SentToArchive);
         
         public void SecondEmployeeOnEntry() => CurrentPerson = "Juliette";
         

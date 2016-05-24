@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using Xunit;
 
 namespace StatelessLib.Tests
@@ -36,6 +37,24 @@ namespace StatelessLib.Tests
             
             doc.Archive();
             doc.State.Should().Be(DocumentState.Archived);
+        }
+
+        [Fact]
+        public void when_invalid_transition_then_exception_thrown()
+        {
+            var doc = new Document();
+
+            Action action = () => doc.FinishSecondEmployeeEntry();
+
+            action.ShouldThrow<InvalidOperationException>();
+        }
+
+        [Fact]
+        public void export_to_dot_graph()
+        {
+            var doc = new Document();
+
+            string graph = doc.StateMachine.ToDotGraph();
         }
     }
 }
