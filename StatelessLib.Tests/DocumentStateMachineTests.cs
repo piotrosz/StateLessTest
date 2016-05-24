@@ -47,6 +47,7 @@ namespace StatelessLib.Tests
             doc.FinishFirstEmployeeEntry();
             doc.FinishSecondEmployeeEntry();
             doc.State.Should().Be(DocumentState.AdditionalCheck);
+            doc.CurrentPerson.Should().Be("John");
             doc.FinishAdditionalCheck();
             doc.State.Should().Be(DocumentState.PendingAcceptance);
         }

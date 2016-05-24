@@ -29,7 +29,6 @@ namespace StatelessLib
             StateMachine.Configure(DocumentState.AdditionalCheck)
                 .OnEntry(AdditionalCheckOnEntry)
                 .Permit(DocumentTrigger.AdditionalCheckFinished, DocumentState.PendingAcceptance);
-                
 
             StateMachine.Configure(DocumentState.PendingAcceptance)
                 .OnEntry(AcceptanceOnEnter)
