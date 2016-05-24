@@ -9,12 +9,10 @@ namespace StatelessLib
         private DateTime? _callBegun;
         private TimeSpan _totalMinutes;
 
-        public State State { get; private set; }
-        
+        public State State { get; private set; } = State.OffHook;
+
         public PhoneCall()
         {
-            State = State.OffHook;
-
             _stateMachine = new StateMachine<State, Trigger>(
                 () => State,
                 newState => State = newState);
@@ -40,25 +38,13 @@ namespace StatelessLib
                 .Permit(Trigger.PhoneHurledAgainstWall, State.PhoneDestroyed);
         }
 
-        public void Dial()
-        {
-            _stateMachine.Fire(Trigger.CallDialed);
-        }
+        public void Dial() => _stateMachine.Fire(Trigger.CallDialed);
 
-        public void Connect()
-        {
-            _stateMachine.Fire(Trigger.CallConnected);
-        }
+        public void Connect() => _stateMachine.Fire(Trigger.CallConnected);
 
-        public void EndCall()
-        {
-            _stateMachine.Fire(Trigger.HungUp);
-        }
+        public void EndCall() => _stateMachine.Fire(Trigger.HungUp);
 
-        private void StartCallTimer()
-        {
-            _callBegun = DateTime.Now;
-        }
+        private void StartCallTimer() => _callBegun = DateTime.Now;
 
         private void StopCallTimer()
         {
